@@ -1,7 +1,5 @@
-type CoursePart = {
-  name: string;
-  exerciseCount: number;
-};
+import type { CoursePart } from "./types";
+import Part from "./Part";
 
 type Props = {
   courseParts: CoursePart[];
@@ -10,10 +8,8 @@ type Props = {
 export default function Content({ courseParts }: Props) {
   return (
     <div>
-      {courseParts.map((part, index) => (
-        <p key={index}>
-          {part.name} {part.exerciseCount}
-        </p>
+      {courseParts.map((part) => (
+        <Part key={part.name} course={part} />
       ))}
     </div>
   );
