@@ -6,9 +6,11 @@ import {
   Visibility,
   Weather,
 } from './components/types'
+import axios from 'axios'
 
 function App() {
   const [entries, setEntries] = useState<Entry[]>([])
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [newDiaryEntry, setNewDiaryEntry] = useState<NewEntry>({
     date: '',
     visibility: Visibility.Good,
@@ -22,15 +24,27 @@ function App() {
     })
   }, [])
 
-  const handleSubmit = () => {
-    console.log(newDiaryEntry)
-    createEntry(newDiaryEntry)
+  const handleSubmit = async () => {
+    try {
+      await createEntry(newDiaryEntry)
+      setErrorMessage(null)
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log('Axios Error')
+        setErrorMessage(error.response?.data)
+      } else {
+        console.log('Unknown Error')
+        console.log(error)
+        setErrorMessage('Unknown Error')
+      }
+    }
   }
 
   return (
     <>
       <div>
         <h1>Add new entry</h1>
+        {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
         <p>
           Date:
           <input
