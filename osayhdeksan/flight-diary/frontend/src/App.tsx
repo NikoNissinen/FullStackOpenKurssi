@@ -13,8 +13,8 @@ function App() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [newDiaryEntry, setNewDiaryEntry] = useState<NewEntry>({
     date: '',
-    visibility: Visibility.Good,
-    weather: Weather.Sunny,
+    visibility: '',
+    weather: '',
     comment: '',
   })
 
@@ -42,62 +42,81 @@ function App() {
 
   return (
     <>
+      <h1>Add new entry</h1>
+      {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
       <div>
-        <h1>Add new entry</h1>
-        {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-        <p>
-          Date:
-          <input
-            type="text"
-            id="date"
-            placeholder="YYYY-MM-DD"
-            value={newDiaryEntry.date}
-            onChange={(e) =>
-              setNewDiaryEntry({ ...newDiaryEntry, date: e.target.value })
-            }
-          ></input>
-        </p>
-        <p>
-          Visibility:
-          <input
-            type="text"
-            id="visibilty"
-            value={newDiaryEntry.visibility}
-            onChange={(e) =>
-              setNewDiaryEntry({
-                ...newDiaryEntry,
-                visibility: e.target.value as Visibility,
-              })
-            }
-          ></input>
-        </p>
-        <p>
-          Weather:
-          <input
-            type="text"
-            id="weather"
-            value={newDiaryEntry.weather}
-            onChange={(e) =>
-              setNewDiaryEntry({
-                ...newDiaryEntry,
-                weather: e.target.value as Weather,
-              })
-            }
-          ></input>
-        </p>
-        <p>
-          Comment:
-          <input
-            type="text"
-            id="comment"
-            value={newDiaryEntry.comment}
-            onChange={(e) =>
-              setNewDiaryEntry({ ...newDiaryEntry, comment: e.target.value })
-            }
-          ></input>
-        </p>
-        <button onClick={() => handleSubmit()}>Add</button>
+        Date:
+        <input
+          type="date"
+          id="date"
+          placeholder="YYYY-MM-DD"
+          value={newDiaryEntry.date}
+          onChange={(e) =>
+            setNewDiaryEntry({ ...newDiaryEntry, date: e.target.value })
+          }
+        ></input>
       </div>
+
+      <div>
+        Visibility:
+        {Object.values(Visibility).map((vis) => {
+          return (
+            <>
+              <label key={vis}>{vis}</label>
+              <input
+                type="radio"
+                id={vis}
+                name={vis}
+                value={vis}
+                checked={newDiaryEntry.visibility === vis}
+                onChange={(e) => {
+                  setNewDiaryEntry({
+                    ...newDiaryEntry,
+                    visibility: e.target.value as Visibility,
+                  })
+                }}
+              />
+            </>
+          )
+        })}
+      </div>
+
+      <div>
+        Weather:
+        {Object.values(Weather).map((w) => {
+          return (
+            <>
+              <label key={w}>{w}</label>
+              <input
+                type="radio"
+                id={w}
+                name={w}
+                value={w}
+                checked={newDiaryEntry.weather === w}
+                onChange={(e) => {
+                  setNewDiaryEntry({
+                    ...newDiaryEntry,
+                    weather: e.target.value as Weather,
+                  })
+                }}
+              />
+            </>
+          )
+        })}
+      </div>
+
+      <div>
+        Comment:
+        <input
+          type="text"
+          id="comment"
+          value={newDiaryEntry.comment}
+          onChange={(e) =>
+            setNewDiaryEntry({ ...newDiaryEntry, comment: e.target.value })
+          }
+        ></input>
+      </div>
+      <button onClick={() => handleSubmit()}>Add</button>
 
       <h1>Diary entries</h1>
       {entries.map((entry) => (
